@@ -119,6 +119,22 @@
     <script>
         function validateForm(){
             var username = document.getElementById('name').value
+            var password = document.getElementById('password').value
+
+            var usernameRegex = /^[a-zA-Z\s]+$;
+            if(!usernameRegex.test(username)){
+                alert('please enter e valide username');
+                return false;
+            }
+            if(password.length < 6){
+                alert('password must be at least 6 character');
+                return false;
+            }
+            if(password != confirmPassword){
+                alert('Password do not match');
+                return false;
+            }
+            return true;
         }
     
       document.getElementById('password').addEventListener('mouseover', function() {
