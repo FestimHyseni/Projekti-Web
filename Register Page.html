@@ -64,6 +64,33 @@
             <a href="Log In.html">Register</a>
             
         </div>
+        <script>
+             function validateForm(){
+            var username = document.getElementById('name').value
+            var email = document.getElementById('email').value
+            var password = document.getElementById('password').value
+
+            var usernameRegex = /^[a-zA-Z\s]+$/;
+            if(!usernameRegex.test(username)){
+                alert('please enter e valide username');
+                return false;
+            }
+            var emailRegex = /^[^|s@]+@[^\s@]+\.[^\s@]+$/;
+            if(!emailRegex.test(email)){
+                alert('Please enter a valide email adress');
+                return false;
+            }
+            if(password.length < 6){
+                alert('password must be at least 6 character');
+                return false;
+            }
+            if(password != confirmPassword){
+                alert('Password do not match');
+                return false;
+            }
+            return true;
+        }
+        </script>
        
         </form>
     </div>
