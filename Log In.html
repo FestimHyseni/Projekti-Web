@@ -120,7 +120,7 @@
             var username = document.getElementById('name').value
             var password = document.getElementById('password').value
 
-            var usernameRegex = /^[a-zA-Z\s]+$;
+            var usernameRegex = /^[a-zA-Z\s]+$/;
             if(!usernameRegex.test(username)){
                 alert('please enter e valide username');
                 return false;
