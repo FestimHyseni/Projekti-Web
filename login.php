@@ -1,3 +1,31 @@
+<?php
+session_start();
+require_once 'Database.php';
+require_once 'User.php';
+
+$database = new Database("localhost", "root", "", "webprojekti");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["login"])) {
+    $user = new User($database);
+    
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    
+    if ($user->login($email, $password)) {
+        // Redirect only if not already on index.php
+        if ($_SERVER['REQUEST_URI'] != '/index.php') {
+            header("Location: index.php");
+            exit();
+        }
+    } else {
+        // Display login error
+        echo "Invalid login credentials. Please try again.";
+    }
+    $user = $_SESSION['user_id'];
+}
+
+include 'header.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,17 +33,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
     <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #2c3e50;
-        }
-
         .login-box {
+            display: flex-1;
+            float: right;
+            margin-right: 450px;
+            margin-top: 65px;
             background-color: #3498db;
             border-radius: 8px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
@@ -53,7 +75,7 @@
         }
 
         .login-container .remember-me {
-            display: flexbox;
+            display: flex;
             align-items: center;
             margin-bottom: 10px;
         }
@@ -62,7 +84,8 @@
             margin-right: 8px;
         }
 
-        .login-box a {
+        .login-box a,
+        .login-box button {
             display: inline-block;
             padding: 10px;
             background-color: #2980b9;
@@ -71,14 +94,13 @@
             border-radius: 4px;
             cursor: pointer;
             width: 100%;
-            text-align: center;}
+            text-align: center;
+        }
 
-       
-            .login-container .Register,
+        .login-container .Register,
         .login-container .cancel {
             text-align: center;
             margin-top: 10px;
-            
         }
 
         .login-container .cancel a,
@@ -90,14 +112,14 @@
 </head>
 <body>
 
-    <div class="login-box">
+<div class="login-box">
         <div class="login-header">
             <h2>Login</h2>
         </div>
         <div class="login-container">
-            <form action="process_login.php" method="post">
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" required>
+            <form action="" method="POST">
+                <label for="email">Email/Username:</label>
+                <input type="text" id="email" name="email" required>
 
                 <label for="password">Password:</label>
                 <input type="password" id="password" name="password" required>
@@ -106,47 +128,16 @@
                     <input type="checkbox" id="remember" name="remember">
                     <label for="remember">Remember me</label>
                 </div>
-               <a href="Home.html">Home</a>
+                <button type="submit" name="login" value="Login now">Login</button>
                 <div class="Register">
-                    <a href="Register Page.html">Register</a>
-             
-                 </div>
-
+                    <a href="register.php">Register</a>
+                </div>
             </form>
         </div>
     </div>
-    <script>
-        function validateForm(){
-            var username = document.getElementById('name').value
-            var password = document.getElementById('password').value
-
-            var usernameRegex = /^[a-zA-Z\s]+$/;
-            if(!usernameRegex.test(username)){
-                alert('please enter e valide username');
-                return false;
-            }
-            if(password.length < 6){
-                alert('password must be at least 6 character');
-                return false;
-            }
-            if(password != confirmPassword){
-                alert('Password do not match');
-                return false;
-            }
-            return true;
-        }
-    
-      document.getElementById('password').addEventListener('mouseover', function() {
-          this.style.backgroundColor = '';
-          this.style.color = '';
-      });
-
-      
-      document.getElementById('password').addEventListener('mouseout', function() {
-          this.style.backgroundColor = '';
-          this.style.color = '';
-      });
-  </script>
-
 </body>
 </html>
+<?php
+include 'footer.php'
+?>
+

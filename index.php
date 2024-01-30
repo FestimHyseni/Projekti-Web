@@ -1,3 +1,35 @@
+<?php
+session_start();
+require_once 'Database.php';
+require_once 'User.php';
+$database = new Database("localhost", "root", "", "webprojekti");
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST["login"])) {
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+
+        $user = new User($database);
+
+        if ($user->login($email, $password)) {
+            // Successfully logged in, fetch name and store it in the session
+            $userData = $user->getUserByEmail($email);
+            $_SESSION['user_id'] = $userData['id'];
+            $_SESSION['user_name'] = $userData['name'];
+            $_SESSION['user_role'] = $userData['role'];
+
+            // Redirect to the dashboard or any other page after successful login
+            header("Location: index.php");
+            exit();
+        } else {
+            // Display login error
+            echo "Invalid login credentials. Please try again.";
+        }
+    }
+}
+
+include 'header.php';
+?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -75,7 +107,7 @@ main {
 }
 
 .Photos {
-    background-color: #333;
+    background-color: #ffffff;
     color: #fff;
     padding: 10px;
 }
@@ -135,6 +167,93 @@ main {
     justify-content: space-between;
     margin-top: 20px;
 }
+* {box-sizing:border-box}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+/* Hide the images by default */
+.mySlides {
+  display: none;
+}
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #f2f2f2;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #bbb;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+/* Fading animation */
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {opacity: .4}
+  to {opacity: 1}
+}
 
 
 
@@ -146,26 +265,46 @@ main {
 }
 
         </style>
+        <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <header>
-        <div class="headeri">
-            <div class="Tuning Shop"> 
-                <p>Tuning Shop</p>
-            </div>
+<body class="bg-gradient-to-r from-gray-200 via-gray-300 to-gray-800">
+<div class="bgfoto">
         </div>
-        <ul>
-            <li><a href="Home.html">Home</a></li>
-            <li><a href="Contact.html">Contact</a></li>
-            <li><a href="Cars.html">Cars</a></li>
-             </ul>
-    </header>
-    <main>
-        <div class="bgfoto">
-            <input type="text" placeholder="Search" style="height: 20px;">
-            <button class="butoni_bg"><img src="img/search.png" alt=""></button>
-        </div>
-        <div class="Photos">
+        <div class="Photos bg-gradient-to-r from-gray-200 via-gray-300 to-gray-800">
+            <!-- Slideshow container -->
+<div class="slideshow-container">
+
+    <!-- Full-width images with number and caption text -->
+    <div class="mySlides fade">
+      <div class="numbertext">1 / 3</div>
+      <img src="img/images (11).jpg" style="width:100%">
+      <div class="text">Caption Text</div>
+    </div>
+  
+    <div class="mySlides fade">
+      <div class="numbertext">2 / 3</div>
+      <img src="img/images (12).jpg" style="width:100%">
+      <div class="text">Caption Two</div>
+    </div>
+  
+    <div class="mySlides fade">
+      <div class="numbertext">3 / 3</div>
+      <img src="img/images (13).jpg" style="width:100%">
+      <div class="text">Caption Three</div>
+    </div>
+  
+    <!-- Next and previous buttons -->
+    <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+    <a class="next" onclick="plusSlides(1)">&#10095;</a>
+  </div>
+  <br>
+  
+  <!-- The dots/circles -->
+  <div style="text-align:center">
+    <span class="dot" onclick="currentSlide(1)"></span>
+    <span class="dot" onclick="currentSlide(2)"></span>
+    <span class="dot" onclick="currentSlide(3)"></span>
+  </div>
             <h3>Photos</h3>
         </div>
         <div class="fotografit">
@@ -233,22 +372,8 @@ main {
                 </div>
             </div>
     </main>
-    <footer>
-        <div class="">
-            <h2>Tuning Shop</h2>
-            <h2>Our Links</h2>
-            <div class="">
-                <a href=""><img src="img/facebook.png" alt=""></a>
-                <a href=""><img src="img/twitter.png" alt=""></a>
-                <a href=""><img src="img/instagram.png" alt=""></a>
-                <a href=""><img src="img/pinterest.png" alt=""></a>
-            </div>
-        </div>
-    </footer>
-   
-    
     <script>
-       
+        
         var photosData = [
             { src: 'img/images (3).jpg', date: '19,10,2020', views: 10460 },
             { src: 'img/images (1).jpg', date: '12,6,2020', views: 19461 },
@@ -260,7 +385,7 @@ main {
             { src: 'img/images (4).jpg', date: '26,12,2021', views: 105469 },
             { src: 'img/images (9).jpg', date: '14,11,2021', views: 107646 }
         ];
-
+        
         function createPhotoElement(photo) {
             var photoDiv = document.createElement('div');
             photoDiv.classList.add('rubrika');
@@ -268,17 +393,17 @@ main {
             var imgElement = document.createElement('img');
             imgElement.src = photo.src;
             imgElement.alt = '';
-
+            
             var creationDateDiv = document.createElement('div');
             creationDateDiv.classList.add('Creation', 'Date');
             creationDateDiv.innerHTML = `
-                <p>${photo.date}</p>
-                <p>${photo.views} Views</p>
+            <p>${photo.date}</p>
+            <p>${photo.views} Views</p>
             `;
-
+            
             photoDiv.appendChild(imgElement);
             photoDiv.appendChild(creationDateDiv);
-
+            
             return photoDiv;
         }
  function searchPhotos() {
@@ -303,6 +428,37 @@ main {
         window.onload = function () {
             displayPhotos(photosData);
         };
+        let slideIndex = 1;
+showSlides(slideIndex);
+
+// Next/previous controls
+function plusSlides(n) {
+  showSlides(slideIndex += n);
+}
+
+// Thumbnail image controls
+function currentSlide(n) {
+  showSlides(slideIndex = n);
+}
+
+function showSlides(n) {
+  let i;
+  let slides = document.getElementsByClassName("mySlides");
+  let dots = document.getElementsByClassName("dot");
+  if (n > slides.length) {slideIndex = 1}
+  if (n < 1) {slideIndex = slides.length}
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" active", "");
+  }
+  slides[slideIndex-1].style.display = "block";
+  dots[slideIndex-1].className += " active";
+}
     </script>
     </body>
 </html>
+<?php
+include 'footer.php'
+?>

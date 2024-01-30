@@ -1,3 +1,7 @@
+<?php
+session_start();
+include 'header.php';
+?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -5,19 +9,7 @@
     <title>Car Tuning</title>
 </head>
 <body>
-    <link rel="stylesheet" href="style.css">
     
-    <div class="headeri">
-    <div class="Tuning Shop"> 
-        <p>Tuning Shop</p>
-    </div>
-</div>
-<ul>
-    <li><a href="Home.html">Home</a></li>
-    <li><a href="Contact.html">Contact</a></li>
-    <li><a href="Cars.html">Cars</a></li>
-     </ul>
-    <h2>Car Tuning</h2>
     <div class="car-container">
       
         <div class="car">
@@ -250,3 +242,6 @@ main {
     </script>
 </body>
 </html>
+<?php
+include 'footer.php'
+?>
