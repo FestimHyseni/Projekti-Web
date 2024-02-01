@@ -12,17 +12,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = new User($database);
 
         if ($user->login($email, $password)) {
-            // Successfully logged in, fetch name and store it in the session
+           
             $userData = $user->getUserByEmail($email);
             $_SESSION['user_id'] = $userData['id'];
             $_SESSION['user_name'] = $userData['name'];
             $_SESSION['user_role'] = $userData['role'];
 
-            // Redirect to the dashboard or any other page after successful login
+       
             header("Location: index.php");
             exit();
         } else {
-            // Display login error
+        
             echo "Invalid login credentials. Please try again.";
         }
     }
